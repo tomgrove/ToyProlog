@@ -2,6 +2,7 @@
 //
 
 #include "stdafx.h"
+#include "term.h"
 
 int _tmain(int argc, _TCHAR* argv[])
 {
