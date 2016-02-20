@@ -37,10 +37,19 @@ namespace Toy {
 		assert(term->IsUnassignedVariable() );
 	}
 
+	void new_structure_is_reachable_from_ref(MachineFixture& fixture)
+	{
+		auto term = fixture.machine.AllocateStruct(12345, 3);
+		assert(term->mType == eStructureRef);
+		assert(term->mReference->mType == eStructure);
+		assert(term->mReference->mStructure.mArity == 3);
+		assert(term->mReference->mStructure.mFunctor == 12345);
+	}
 
 	void TestMachine()
 	{
 		MachineFixture fixture;
 		new_variable_is_unassigned(fixture);
+		new_structure_is_reachable_from_ref(fixture);
 	}
 };
