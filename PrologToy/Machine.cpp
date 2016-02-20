@@ -1,43 +1,46 @@
 #include "stdafx.h"
 #include "machine.h"
+#include <assert.h>
 
 namespace Toy {
 
-	Term& Machine::AllocVariable()
+	Term* Machine::AllocVariable()
 	{
-		Term term;
-		term.mType = eVariableRef;
-		term.mReference = mHeap.size();
-
-		mHeap.push_back(term);
-
-		return mHeap[mHeap.size() - 1];
+		Term*  term = new Term();
+		term->mType = eVariableRef;
+		term->mReference = term;
+		return term;
 	}
 
-	Term& Machine::AllocateStruct(FunctorType functor, uint32_t arity )
+	Term* Machine::AllocateStruct(FunctorType functor, uint32_t arity )
 	{
-		Term term;
-		term.mType					= eStructure;
-		term.mStructure.mArity		= arity;
-		term.mStructure.mFunctor	= functor;
+		Term* term = new Term[ arity + 1];
+		term[0].mType					= eStructure;
+		term[0].mStructure.mArity		= arity;
+		term[0].mStructure.mFunctor		= functor;
 
-		uint32_t structureindex = mHeap.size();
-		mHeap.push_back(term);
+		Term* ref = new Term();
+		ref->mType		= eStructureRef;
+		ref->mReference   = term;
 
-		for (uint32_t i = 0; i < arity; i++)
-		{
-			Term null;
-			null.mType = eNull;
-			mHeap.push_back(null);
-		}
-
-		Term ref;
-		ref.mType		= eStructureRef;
-		ref.mReference   = structureindex;
-
-		mHeap.push_back(ref);
-
-		return mHeap[mHeap.size() - 1];
+		return ref;
 	}
 	
+	struct MachineFixture
+	{
+		Machine machine;
+	};
+
+	void new_variable_is_unassigned(MachineFixture& fixture )
+	{
+		auto term = fixture.machine.AllocVariable();
+		assert(term->IsUnassignedVariable() );
+	}
+
+
+	void TestMachine()
+	{
+		MachineFixture fixture;
+		new_variable_is_unassigned(fixture);
+	}
 };

@@ -6,9 +6,11 @@
 namespace Toy {
 	class Machine
 	{
-		std::vector<Term>	mHeap;
 	public:
-		Term& AllocVariable();
-		Term& AllocateStruct(FunctorType functor, uint32_t arity);
+		Term* AllocVariable();
+		Term* AllocateStruct(FunctorType functor, uint32_t arity);
+
 	};
+
+	void TestMachine();
 }

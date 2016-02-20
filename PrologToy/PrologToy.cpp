@@ -3,9 +3,12 @@
 
 #include "stdafx.h"
 #include "term.h"
+#include "machine.h"
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	Toy::TestMachine();
+
 	return 0;
 }
 

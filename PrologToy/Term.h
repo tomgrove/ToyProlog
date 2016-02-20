@@ -2,6 +2,8 @@
 
 namespace Toy {
 
+	struct Term;
+
 	typedef enum TermType {
 		eNull,
 		eVariableRef,
@@ -10,7 +12,7 @@ namespace Toy {
 	};
 
 	typedef uint32_t FunctorType;
-	typedef uint32_t VarType;
+	typedef Term*    VarType;
 
 	struct StructType
 	{
@@ -24,5 +26,13 @@ namespace Toy {
 			VarType	   mReference;
 			StructType mStructure;
 		};
+
+		Term() : mType(eNull)
+		{}
+
+		bool IsUnassignedVariable() const
+		{
+			return mType == eVariableRef && mReference == this;
+		}
 	};
 }
