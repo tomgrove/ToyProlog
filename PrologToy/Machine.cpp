@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "machine.h"
+#include <iostream>
+#include <sstream>
 #include <assert.h>
 
 namespace Toy {
@@ -46,6 +48,59 @@ namespace Toy {
 	{
 		auto term = AllocVariable();
 		*term = mXs[reg];
+	}
+
+	void Machine::Execute(Instruction* instructions)
+	{
+		Instruction* instr = instructions;
+		while (instr->mOp != eProceed)
+		{
+			switch (instr->mOp)
+			{
+				case ePut_structure:
+					put_structure(instr->mArgs[0], instr->mArgs[1], instr->mArgs[1]);
+					break;
+				case eSet_Value:
+					set_value(instr->mArgs[0]);
+					break;
+				case eSet_Variable:
+					set_variable(instr->mArgs[0]);
+					break;
+				case eNop:
+					break;
+				default:
+					assert(0);
+			}
+			instr++;
+		}
+	}
+
+	void Machine::Disassemble(Instruction* instructions, uint32_t count, std::stringstream& ss)
+	{
+		for (uint32_t i = 0; i < count; i++)
+		{
+			auto& instr = instructions[i];
+			switch (instr.mOp)
+			{
+				case eNop:
+					ss << "nop" << std::endl;
+					break;
+				case ePut_structure:
+					ss << "put_structure\t\t" << instr.mArgs[0] << "/" << instr.mArgs[1] << " x" << instr.mArgs[2] << std::endl;
+					break;
+				case eSet_Value:
+					ss << "set_value\t\tx" << instr.mArgs[0] << std::endl;
+					break;
+				case eSet_Variable:
+					ss << "set_variable\t\tx" << instr.mArgs[0] << std::endl;
+					break;
+				case eProceed:
+					ss << "proceed" << std::endl;
+					break;
+				default:
+					ss << "illegal instruction: " << instr.mOp << std::endl;
+			}
+		}
 	}
 
 	struct MachineFixture

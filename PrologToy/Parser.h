@@ -29,6 +29,14 @@ namespace Toy {
 			mArguments.push_back(a1);
 		}
 
+		ParseTerm(std::string name, ParseTerm a0, ParseTerm a1, ParseTerm a2)
+			: mFunctor(name)
+		{
+			mArguments.push_back(a0);
+			mArguments.push_back(a1);
+			mArguments.push_back(a2);
+		}
+
 		const bool IsVariable()
 		{
 			return mArguments.size() == 0 && mFunctor[0] >= 'A' && mFunctor[0] <= 'Z';
