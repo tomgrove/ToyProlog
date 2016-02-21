@@ -68,7 +68,7 @@ namespace Toy {
 		{
 			switch (instr->mOp)
 			{
-				case ePut_structure:
+				case ePut_Structure:
 					put_structure(instr->mArgs[0], instr->mArgs[1], instr->mArgs[2]);
 					break;
 				case eSet_Value:
@@ -96,14 +96,23 @@ namespace Toy {
 				case eNop:
 					ss << "nop" << std::endl;
 					break;
-				case ePut_structure:
+				case ePut_Structure:
 					ss << "put_structure\t\t" << instr.mArgs[0] << "/" << instr.mArgs[1] << " x" << instr.mArgs[2] << std::endl;
+					break;
+				case eGet_Structure:
+					ss << "get_structure\t\t" << instr.mArgs[0] << "/" << instr.mArgs[1] << " x" << instr.mArgs[2] << std::endl;
 					break;
 				case eSet_Value:
 					ss << "set_value\t\tx" << instr.mArgs[0] << std::endl;
 					break;
 				case eSet_Variable:
 					ss << "set_variable\t\tx" << instr.mArgs[0] << std::endl;
+					break;
+				case eUnify_Variable:
+					ss << "unify_variable\t\tx" << instr.mArgs[0] << std::endl;
+					break;
+				case eUnify_Value:
+					ss << "unify_value\t\tx" << instr.mArgs[0] << std::endl;
 					break;
 				case eProceed:
 					ss << "proceed" << std::endl;

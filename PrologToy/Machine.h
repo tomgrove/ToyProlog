@@ -21,9 +21,12 @@ namespace Toy {
 
 		typedef enum {
 			eNop,
-			ePut_structure,
+			ePut_Structure,
 			eSet_Variable,
 			eSet_Value,
+			eGet_Structure,
+			eUnify_Variable,
+			eUnify_Value,
 			eProceed
 		} Opcode;
 

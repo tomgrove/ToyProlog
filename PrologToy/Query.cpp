@@ -26,7 +26,7 @@ namespace Toy {
 	void QueryCompiler::Compile(ParseTerm& term, std::vector<Machine::Instruction>& instructions, uint32_t& reg)
 	{
 		std::vector<uint32_t> arguments;
-		Machine::Instruction root(Machine::Instruction(Machine::Opcode::ePut_structure, GetName(term.mFunctor), term.mArguments.size(), reg));
+		Machine::Instruction root(Machine::Instruction(Machine::Opcode::ePut_Structure, GetName(term.mFunctor), term.mArguments.size(), reg));
 		reg++;
 		for (auto& term : term.mArguments)
 		{
