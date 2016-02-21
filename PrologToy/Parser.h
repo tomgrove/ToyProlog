@@ -29,12 +29,29 @@ namespace Toy {
 			mArguments.push_back(a1);
 		}
 
+		const bool IsVariable()
+		{
+			return mArguments.size() == 0 && mFunctor[0] >= 'A' && mFunctor[0] <= 'Z';
+		}
+
+		const bool IsConstant()
+		{
+			return mArguments.size() == 0 && mFunctor[0] >= 'a' && mFunctor[0] <= 'z';
+		}
+
+		const bool IsStructure()
+		{
+			return mArguments.size() > 0;
+		}
+
 	private:
 		std::string				mFunctor;
 		std::vector<ParseTerm>	mArguments;
 
 	public:
 		void Serialize(std::stringstream& ss);
+
+		friend class QueryCompiler;
 	};
 
 	class Parser

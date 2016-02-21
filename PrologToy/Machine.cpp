@@ -4,28 +4,50 @@
 
 namespace Toy {
 
+	Term* Machine::AllocCells( uint32_t numCells )
+	{
+		assert(mHeapIndex < (MaxHeapSize-numCells) );
+		mHeapIndex += numCells;
+		return &mH[mHeapIndex - numCells ];
+	}
+
 	Term* Machine::AllocVariable()
 	{
-		Term*  term = new Term();
+		Term*  term = AllocCells(1);
 		term->mType = eVariableRef;
 		term->mReference = term;
 		return term;
 	}
 
-	Term* Machine::AllocateStruct(FunctorType functor, uint32_t arity )
+	Term* Machine::AllocStructure(FunctorType functor, uint32_t arity )
 	{
-		Term* term = new Term[ arity + 1];
-		term[0].mType					= eStructure;
-		term[0].mStructure.mArity		= arity;
-		term[0].mStructure.mFunctor		= functor;
+		Term* term = AllocCells( 2 );
+		term[1].mType					= eStructure;
+		term[1].mStructure.mArity		= arity;
+		term[1].mStructure.mFunctor		= functor;
 
-		Term* ref = new Term();
-		ref->mType		= eStructureRef;
-		ref->mReference   = term;
+		term[0].mType					= eStructureRef;
+		term[0].mReference				= &term[1];
 
-		return ref;
+		return &term[0];
 	}
 	
+	void Machine::put_structure(FunctorType functor, uint32_t arity, uint32_t reg)
+	{
+		mXs[reg] = *AllocStructure(functor, arity);
+	}
+
+	void Machine::set_variable(uint32_t reg)
+	{
+		mXs[reg] = *AllocVariable();
+	}
+
+	void Machine::set_value(uint32_t reg)
+	{
+		auto term = AllocVariable();
+		*term = mXs[reg];
+	}
+
 	struct MachineFixture
 	{
 		Machine machine;
@@ -39,7 +61,7 @@ namespace Toy {
 
 	void new_structure_is_reachable_from_ref(MachineFixture& fixture)
 	{
-		auto term = fixture.machine.AllocateStruct(12345, 3);
+		auto term = fixture.machine.AllocStructure(12345, 3);
 		assert(term->mType == eStructureRef);
 		assert(term->mReference->mType == eStructure);
 		assert(term->mReference->mStructure.mArity == 3);
