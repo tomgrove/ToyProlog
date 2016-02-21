@@ -71,6 +71,7 @@ namespace Toy {
 
 		void Execute(Instruction* instructions);
 		void Disassemble(Instruction* instructions, uint32_t count, std::stringstream& ss);
+		void DumpHeap(std::stringstream& ss);
 	private:
 		Term* AllocCells( uint32_t numCells );
 	};

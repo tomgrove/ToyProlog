@@ -72,7 +72,20 @@ namespace Toy {
 
 		compiler.Compile(term, code);
 		machine.Disassemble(&code[0], code.size(), ss);
+		{
+			std::stringstream termstring;
+			term.Serialize(termstring);
+			std::cout << "term: " << termstring.str() << std::endl;
+		}
+
 		std::cout << "generated:\n\n" << ss.str() << "\ntarget:\n\n" << disassembly << std::endl;
+		
+		{
+			machine.Execute(&code[0]);
+			std::stringstream heapdump;
+			machine.DumpHeap(heapdump);
+			std::cout << "heap:\n\n" << heapdump.str() << std::endl;
+		}
 		assert(ss.str() == disassembly);
 	}
 

@@ -58,7 +58,7 @@ namespace Toy {
 			switch (instr->mOp)
 			{
 				case ePut_structure:
-					put_structure(instr->mArgs[0], instr->mArgs[1], instr->mArgs[1]);
+					put_structure(instr->mArgs[0], instr->mArgs[1], instr->mArgs[2]);
 					break;
 				case eSet_Value:
 					set_value(instr->mArgs[0]);
@@ -99,6 +99,27 @@ namespace Toy {
 					break;
 				default:
 					ss << "illegal instruction: " << instr.mOp << std::endl;
+			}
+		}
+	}
+
+	void Machine::DumpHeap(std::stringstream& ss)
+	{
+		for (uint32_t i = 0; i < mHeapIndex; i++)
+		{
+			auto& term = mH[i];
+			ss << i << "\t";
+			switch (term.mType)
+			{
+				case eStructure:
+					ss << term.mStructure.mFunctor << "/" << term.mStructure.mArity << std::endl;
+					break;
+				case eStructureRef:
+					ss << "STR " << (term.mReference - mH) << std::endl;
+					break;
+				case eVariableRef:
+					ss << "REF " << (term.mReference - mH) << std::endl;
+					break;
 			}
 		}
 	}
