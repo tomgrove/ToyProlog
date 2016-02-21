@@ -25,8 +25,21 @@ namespace Toy {
 
 	void QueryCompiler::Compile(ParseTerm& term, std::vector<Machine::Instruction>& instructions, uint32_t& reg)
 	{
-		uint32_t parent = reg;
+		std::vector<Machine::Instruction> preceding;
+		std::vector<uint32_t> arguments;
+		Machine::Instruction root(Machine::Instruction(Machine::Opcode::ePut_structure, GetName(term.mFunctor), term.mArguments.size(), reg));
 		reg++;
+		for (auto& term : term.mArguments)
+		{
+			if (!term.IsVariable())
+			{
+				arguments.push_back(reg);
+				Compile(term, instructions, reg);
+			}
+		}
+
+		uint32_t index = 0;
+		instructions.push_back(root);
 		for (auto& term : term.mArguments)
 		{
 			if (term.IsVariable())
@@ -44,10 +57,10 @@ namespace Toy {
 			}
 			else
 			{
-				Compile(term, instructions, reg);
+				instructions.push_back(Machine::Instruction(Machine::Opcode::eSet_Value, arguments[index]));
+				index++;
 			}
 		}
-		instructions.push_back(Machine::Instruction(Machine::Opcode::ePut_structure, GetName( term.mFunctor ), term.mArguments.size(), parent ));
 	}
 
 	void QueryTestHelper( ParseTerm& term, std::string disassembly )
@@ -74,27 +87,33 @@ namespace Toy {
 		{
 			ParseTerm t("f", ParseTerm("X"));
 			QueryTestHelper(t, "put_structure\t\t0/1 x0\n"
-							   "set_variable\t\t x1\n"
+							   "set_variable\t\tx1\n"
 				               "proceed\n");
 		}
 
 		{
 			ParseTerm t("f", ParseTerm("x"));
-			QueryTestHelper(t, "put_structure\t\t0/0 x1\n"
-							   "put_structure\t\t1/1 x0\n"
-							   "set_value\t\t x1\n"
+			QueryTestHelper(t, "put_structure\t\t1/0 x1\n"
+							   "put_structure\t\t0/1 x0\n"
+							   "set_value\t\tx1\n"
 							   "proceed\n");
 		}
 
 		{
-			ParseTerm t("f", ParseTerm("Z"), 
+			ParseTerm t("p", ParseTerm("Z"), 
 							 ParseTerm( "h", ParseTerm("Z"), ParseTerm("W")), 
 							 ParseTerm("f", ParseTerm("W")) );
 
-			QueryTestHelper(t, "put_structure\t\t0/0 x1\n"
-				"put_structure\t\t1/1 x0\n"
-				"set_value\t\t x1\n"
-				"proceed\n");
+			QueryTestHelper(t, "put_structure\t\t1/2 x1\n"
+							   "set_variable\t\tx2\n"
+							   "set_variable\t\tx3\n"
+							   "put_structure\t\t2/1 x4\n"
+							   "set_value\t\tx3\n"
+							   "put_structure\t\t0/3 x0\n"
+							   "set_value\t\tx2\n"
+							   "set_value\t\tx1\n"
+							   "set_value\t\tx4\n"
+							   "proceed\n");
 		}
 
 	}
