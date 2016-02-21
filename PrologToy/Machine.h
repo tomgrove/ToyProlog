@@ -10,6 +10,7 @@ namespace Toy {
 		Machine() 
 			: mHeapIndex(0)
 			, mH(new Term[ MaxHeapSize ])
+			, mWrite( false )
 		{}
 
 		Term* AllocVariable();
@@ -63,15 +64,22 @@ namespace Toy {
 		Term		mXs[ NumTempRegisters ];
 		Term*		mH;
 		uint32_t	mHeapIndex;
+		bool		mWrite;
+
+		Term* DeRef(Term* term);
 
 		// opcodes
 		void put_structure(FunctorType functor, uint32_t arity, uint32_t reg);
 		void set_variable(uint32_t reg );
 		void set_value(uint32_t reg);
+		void get_structure(FunctorType functor, uint32_t arity, uint32_t reg);
+		void unify_variable(uint32_t reg);
+		void unify_value(uint32_t reg);
 
 		void Execute(Instruction* instructions);
 		void Disassemble(Instruction* instructions, uint32_t count, std::stringstream& ss);
 		void DumpHeap(std::stringstream& ss);
+		bool CheckHeap();
 	private:
 		Term* AllocCells( uint32_t numCells );
 	};

@@ -32,7 +32,7 @@ namespace Toy {
 
 		bool IsUnassignedVariable() const
 		{
-			return mType == eVariableRef && mReference == this;
+			return (mType == eVariableRef) && (mReference == this);
 		}
 	};
 }

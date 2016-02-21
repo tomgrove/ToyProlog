@@ -34,6 +34,17 @@ namespace Toy {
 		return &term[0];
 	}
 	
+	Term* Machine::DeRef(Term* term)
+	{
+		if (term->mType == eVariableRef &&
+			term->mReference != term)
+		{
+			return DeRef(term->mReference);
+		}
+
+		return term;
+	}
+
 	void Machine::put_structure(FunctorType functor, uint32_t arity, uint32_t reg)
 	{
 		mXs[reg] = *AllocStructure(functor, arity);
@@ -101,6 +112,39 @@ namespace Toy {
 					ss << "illegal instruction: " << instr.mOp << std::endl;
 			}
 		}
+	}
+
+	bool Machine::CheckHeap()
+	{
+		for (uint32_t i = 0; i < mHeapIndex; i++)
+		{
+			auto& term = mH[i];
+			switch (term.mType)
+			{
+				case eStructureRef:
+					if (term.mReference->mType != eStructure)
+					{
+						return false;
+					}
+					break;
+				case eVariableRef:
+					{
+						auto deref = DeRef(&term);
+						if (!(deref->IsUnassignedVariable() ||
+							 (deref->mType == eStructureRef) ))
+						{
+							return  false;
+						}
+					}
+					break;
+				case eStructure:
+					break;
+				default:
+					return false;
+			}
+		}
+
+		return true;
 	}
 
 	void Machine::DumpHeap(std::stringstream& ss)

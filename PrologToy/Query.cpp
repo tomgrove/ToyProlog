@@ -25,7 +25,6 @@ namespace Toy {
 
 	void QueryCompiler::Compile(ParseTerm& term, std::vector<Machine::Instruction>& instructions, uint32_t& reg)
 	{
-		std::vector<Machine::Instruction> preceding;
 		std::vector<uint32_t> arguments;
 		Machine::Instruction root(Machine::Instruction(Machine::Opcode::ePut_structure, GetName(term.mFunctor), term.mArguments.size(), reg));
 		reg++;
@@ -85,6 +84,7 @@ namespace Toy {
 			std::stringstream heapdump;
 			machine.DumpHeap(heapdump);
 			std::cout << "heap:\n\n" << heapdump.str() << std::endl;
+			assert(machine.CheckHeap());
 		}
 		assert(ss.str() == disassembly);
 	}
