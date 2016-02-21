@@ -16,7 +16,7 @@ namespace Toy {
 
 	void QueryCompiler::Compile(ParseTerm& term, Machine& machine, uint32_t& reg)
 	{
-		if (term.IsStructure())
+		if (term.IsStructure() || term.IsConstant() )
 		{
 			machine.put_structure(GetName(term.mFunctor), term.mArguments.size(), reg );
 			reg++;
@@ -27,6 +27,16 @@ namespace Toy {
 		}
 		else if (term.IsVariable())
 		{
+			if (mVariables.find(term.mFunctor) != mVariables.end())
+			{
+				machine.set_value(mVariables[term.mFunctor]);
+			}
+			else
+			{
+				machine.set_variable(reg);
+				mVariables[term.mFunctor] = reg;
+				reg++;
+			}
 		}
 	}
 }

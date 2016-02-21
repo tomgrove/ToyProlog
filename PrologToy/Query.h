@@ -14,7 +14,7 @@ namespace Toy {
 	private:
 		FunctorType GetName(const std::string& name);
 		std::map < std::string, FunctorType > mNameTable;
-		std::map< std::string, Term*> mVariables;
+		std::map< std::string, uint32_t> mVariables;
 		FunctorType mNextName;
 	};
 }
