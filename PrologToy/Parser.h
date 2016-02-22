@@ -60,6 +60,7 @@ namespace Toy {
 		void Serialize(std::stringstream& ss);
 
 		friend class QueryCompiler;
+		friend class L0Compiler;
 	};
 
 	class Parser

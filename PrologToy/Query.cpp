@@ -5,17 +5,6 @@
 
 namespace Toy {
 
-	FunctorType QueryCompiler::GetName(const std::string& name)
-	{
-		if (mNameTable.find(name) == mNameTable.end())
-		{
-			mNameTable[name] = mNextName;
-			mNextName++;
-		}
-
-		return mNameTable[name];
-	}
-
 	void QueryCompiler::Compile(ParseTerm& term, std::vector<Machine::Instruction>& instructions)
 	{
 		uint32_t reg = 0;

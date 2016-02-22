@@ -79,6 +79,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Compiler.h" />
+    <ClInclude Include="L0Compiler.h" />
     <ClInclude Include="Machine.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="Query.h" />
@@ -87,6 +89,8 @@
     <ClInclude Include="Term.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Complier.cpp" />
+    <ClCompile Include="L0Compiler.cpp" />
     <ClCompile Include="Machine.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="PrologToy.cpp" />
