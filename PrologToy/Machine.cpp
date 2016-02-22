@@ -45,6 +45,19 @@ namespace Toy {
 		return term;
 	}
 
+	void Machine::Bind(Term* term, Term* ref)
+	{
+		assert(term->mType == eStructureRef ||
+			   term->mType == eVariableRef);
+
+		term->mReference = ref;
+	}
+
+	void Machine::Unify(Term* t0, Term* t1)
+	{
+
+	}
+
 	void Machine::put_structure(FunctorType functor, uint32_t arity, uint32_t reg)
 	{
 		mXs[reg] = *AllocStructure(functor, arity);
@@ -59,6 +72,63 @@ namespace Toy {
 	{
 		auto term = AllocVariable();
 		*term = mXs[reg];
+	}
+
+	void Machine::get_structure(uint32_t functor, uint32_t arity, uint32_t reg)
+	{
+		Term* t = DeRef(mXs[reg].mReference);
+		switch (t->mType)
+		{
+			case eVariableRef:
+			{
+				auto str = AllocStructure(functor, arity);
+				Bind(t, str);
+				mMode = eWrite;
+			}
+			break;
+			case eStructureRef:
+				if (t->mReference->mStructure.mArity == arity &&
+					t->mReference->mStructure.mFunctor == functor)
+				{
+					mS = t->mReference + 1;
+					mMode = eRead;
+				}
+				else
+				{
+					mFail = true;
+				}
+				break;
+			default:
+				mFail = true;
+		}
+	}
+
+	void Machine::unify_variable(uint32_t reg)
+	{
+		switch (mMode)
+		{
+		case eRead:
+			mXs[reg] = *mS;
+			break;
+		case eWrite:
+			set_variable(reg);
+			break;
+		}
+		mS++;
+	}
+
+	void Machine::unify_value(uint32_t reg)
+	{
+		switch (mMode)
+		{
+		case eRead:
+			Unify(mXs[reg].mReference, mS);
+			break;
+		case eWrite:
+			set_value(reg);
+			break;
+		}
+		mS++;
 	}
 
 	void Machine::Execute(Instruction* instructions)
@@ -76,6 +146,15 @@ namespace Toy {
 					break;
 				case eSet_Variable:
 					set_variable(instr->mArgs[0]);
+					break;
+				case eGet_Structure:
+					get_structure(instr->mArgs[0], instr->mArgs[1], instr->mArgs[2]);
+					break;
+				case eUnify_Variable:
+					unify_variable(instr->mArgs[0]);
+					break;
+				case eUnify_Value:
+					unify_value(instr->mArgs[0]);
 					break;
 				case eNop:
 					break;

@@ -10,7 +10,9 @@ namespace Toy {
 		Machine() 
 			: mHeapIndex(0)
 			, mH(new Term[ MaxHeapSize ])
-			, mWrite( false )
+			, mMode( eRead )
+			, mFail( false )
+			, mS( nullptr )
 		{}
 
 		Term* AllocVariable();
@@ -18,6 +20,11 @@ namespace Toy {
 		
 		static const uint32_t NumTempRegisters = 256;
 		static const uint32_t MaxHeapSize	   = 1024 * 1024;
+
+		typedef enum {
+			eRead,
+			eWrite
+		} Mode;
 
 		typedef enum {
 			eNop,
@@ -66,10 +73,15 @@ namespace Toy {
 
 		Term		mXs[ NumTempRegisters ];
 		Term*		mH;
+		Term*		mS;
 		uint32_t	mHeapIndex;
-		bool		mWrite;
+		Mode		mMode;
+		bool		mFail;
 
 		Term* DeRef(Term* term);
+		void  Bind(Term* term, Term* ref);
+		void  Unify(Term* t0, Term* t1);
+
 
 		// opcodes
 		void put_structure(FunctorType functor, uint32_t arity, uint32_t reg);
