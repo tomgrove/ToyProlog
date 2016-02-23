@@ -36,6 +36,8 @@ namespace Toy {
 	
 	Term* Machine::DeRef(Term* term)
 	{
+		assert( term->IsReference() );
+
 		if (term->mType == eVariableRef &&
 			term->mReference != term)
 		{
@@ -47,15 +49,48 @@ namespace Toy {
 
 	void Machine::Bind(Term* term, Term* ref)
 	{
-		assert(term->mType == eStructureRef ||
-			   term->mType == eVariableRef);
+		assert( term->IsReference()) ;
 
 		term->mReference = ref;
 	}
 
 	void Machine::Unify(Term* t0, Term* t1)
 	{
-
+		std::vector<Term*> pdl;
+		pdl.push_back(t0);
+		pdl.push_back(t1);
+		mFail = false;
+		while(!(pdl.empty() || mFail))
+		{ 
+			Term* d0 = DeRef( pdl[ pdl.size() - 1] );
+			Term* d1 = DeRef( pdl[ pdl.size() - 2] );
+			pdl.pop_back();
+			pdl.pop_back();
+			if (d0 != d1)
+			{
+				if (d0->mType == eVariableRef ||
+					d1->mType == eVariableRef)
+				{
+					Bind(d0, d1);
+				}
+				else
+				{
+					if (d0->mReference->mStructure.mFunctor == d1->mReference->mStructure.mFunctor &&
+						d0->mReference->mStructure.mArity == d1->mReference->mStructure.mArity)
+					{
+						for (uint32_t i = 0; i < d0->mReference->mStructure.mArity; i++)
+						{
+							pdl.push_back(d0 + i);
+							pdl.push_back(d1 + i);
+						}
+					}
+					else
+					{
+						mFail = true;
+					}
+				}
+			}
+		}
 	}
 
 	void Machine::put_structure(FunctorType functor, uint32_t arity, uint32_t reg)
@@ -276,10 +311,20 @@ namespace Toy {
 		assert(term->mReference->mStructure.mFunctor == 12345);
 	}
 
+	void bound_variable_deferences(MachineFixture& fixture )
+	{
+		auto term = fixture.machine.AllocVariable();
+		auto atom = fixture.machine.AllocStructure(12345, 0);
+		fixture.machine.Bind(term, atom);
+		Term* dr = fixture.machine.DeRef(term);
+		assert(dr->mType == eStructureRef && dr->mReference->mStructure.mFunctor == 12345);
+	}
+
 	void TestMachine()
 	{
 		MachineFixture fixture;
 		new_variable_is_unassigned(fixture);
 		new_structure_is_reachable_from_ref(fixture);
+		bound_variable_deferences(fixture);
 	}
 };

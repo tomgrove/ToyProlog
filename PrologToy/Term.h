@@ -34,5 +34,10 @@ namespace Toy {
 		{
 			return (mType == eVariableRef) && (mReference == this);
 		}
+
+		bool IsReference() const
+		{
+			return mType == eVariableRef || mType == eStructureRef;
+		}
 	};
 }
