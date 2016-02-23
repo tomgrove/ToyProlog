@@ -79,10 +79,13 @@ namespace Toy {
 		std::vector<Machine::Instruction> qinstr;
 		qc.Compile(q, qinstr);
 		machine.Execute(&qinstr[0]);
+		Term* qroot = &machine.mXs[0];
 		machine.DumpHeap(hs);
 		std::cout << hs.str() << std::endl << std::endl;
 		machine.Execute(&instructions[0]);
 		machine.DumpHeap(hs);
+		machine.SerializeTerm(qroot, hs);
 		std::cout << hs.str() << std::endl << std::endl;
+
 	}
 }

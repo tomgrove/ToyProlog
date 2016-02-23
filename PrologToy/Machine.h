@@ -94,6 +94,7 @@ namespace Toy {
 		void Execute(Instruction* instructions);
 		void Disassemble(Instruction* instructions, uint32_t count, std::stringstream& ss);
 		void DumpHeap(std::stringstream& ss);
+		void SerializeTerm(Term* term, std::stringstream& ss);
 		bool CheckHeap();
 	private:
 		Term* AllocCells( uint32_t numCells );

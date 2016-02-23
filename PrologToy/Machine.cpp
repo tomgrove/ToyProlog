@@ -291,6 +291,45 @@ namespace Toy {
 		}
 	}
 
+
+	void Machine::SerializeTerm(Term* term, std::stringstream& ss)
+	{
+		switch ( term->mType ) 
+		{
+		case eStructureRef:
+			SerializeTerm(term->mReference, ss);
+			break;
+		case eVariableRef:
+			if (term->IsUnassignedVariable())
+			{
+				ss << "X_" << (term->mReference - mH);
+			}
+			else
+			{
+				SerializeTerm(term->mReference, ss);
+			}
+			break;
+		case eStructure:
+			ss << "f_" << term->mStructure.mFunctor;
+			if (term->mStructure.mArity > 0)
+			{
+				ss << "(";
+				for (uint32_t i = 0; i < term->mStructure.mArity; i++)
+				{
+					SerializeTerm(term + 1 + i, ss);
+					if (i < (term->mStructure.mArity - 1))
+					{
+						ss << ", ";
+					}
+				}
+				ss << ")";
+			}
+			break;
+		default:
+			assert(0);
+		}
+	}
+
 	struct MachineFixture
 	{
 		Machine machine;
