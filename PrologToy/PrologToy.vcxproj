@@ -82,6 +82,7 @@
     <ClInclude Include="Compiler.h" />
     <ClInclude Include="L0Compiler.h" />
     <ClInclude Include="Machine.h" />
+    <ClInclude Include="Names.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="Query.h" />
     <ClInclude Include="stdafx.h" />
@@ -92,6 +93,7 @@
     <ClCompile Include="Complier.cpp" />
     <ClCompile Include="L0Compiler.cpp" />
     <ClCompile Include="Machine.cpp" />
+    <ClCompile Include="Names.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="PrologToy.cpp" />
     <ClCompile Include="Query.cpp" />

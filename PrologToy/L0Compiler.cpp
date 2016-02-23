@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "L0Compiler.h"
+#include "Query.h"
 
 namespace Toy {
 
 	void L0Compiler::Compile(ParseTerm& term, std::vector<Machine::Instruction>& instructions, uint32_t& reg, uint32_t root )
 	{
 		std::vector<uint32_t> children;
-		instructions.push_back( Machine::Instruction(Machine::Opcode::eGet_Structure, GetName(term.mFunctor), term.mArguments.size(), root ));
+		instructions.push_back( Machine::Instruction(Machine::Opcode::eGet_Structure, mNameTable.GetName(term.mFunctor), term.mArguments.size(), root ));
 		for (auto& argument : term.mArguments)
 		{
 			if (argument.IsVariable())
@@ -51,7 +52,8 @@ namespace Toy {
 
 	void TestL0Compiler()
 	{
-		L0Compiler compiler;
+		Nametable nametable;
+		L0Compiler compiler( nametable );
 
 		ParseTerm t("p", ParseTerm("f", ParseTerm("X")),
 			ParseTerm("h", ParseTerm("Y"), ParseTerm("f", ParseTerm("a"))),
@@ -59,6 +61,7 @@ namespace Toy {
 		
 		std::vector<Machine::Instruction> instructions;
 		compiler.Compile(t, instructions);
+
 
 		std::stringstream ss;
 		t.Serialize(ss);
@@ -70,6 +73,16 @@ namespace Toy {
 
 		std::cout << ss.str() << std::endl;
 
-
+		std::stringstream hs;
+		ParseTerm q("p", ParseTerm("X"), ParseTerm("Y"), ParseTerm("Z"));
+		QueryCompiler qc(nametable);
+		std::vector<Machine::Instruction> qinstr;
+		qc.Compile(q, qinstr);
+		machine.Execute(&qinstr[0]);
+		machine.DumpHeap(hs);
+		std::cout << hs.str() << std::endl << std::endl;
+		machine.Execute(&instructions[0]);
+		machine.DumpHeap(hs);
+		std::cout << hs.str() << std::endl << std::endl;
 	}
 }

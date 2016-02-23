@@ -111,7 +111,7 @@ namespace Toy {
 
 	void Machine::get_structure(uint32_t functor, uint32_t arity, uint32_t reg)
 	{
-		Term* t = DeRef(mXs[reg].mReference);
+		Term* t = DeRef(&mXs[reg]);
 		switch (t->mType)
 		{
 			case eVariableRef:

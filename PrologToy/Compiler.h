@@ -4,21 +4,19 @@
 #include <map>
 #include "parser.h"
 #include "Machine.h"
+#include "Names.h"
 
 namespace Toy {
 
 	class Compiler
 	{
 	public:
-		Compiler()
-			: mNextName(0)
+		Compiler(Nametable& nametable )
+			: mNameTable( nametable )
 		{}
 		virtual void Compile(ParseTerm& term, std::vector<Machine::Instruction>& instructions) = 0;
 	protected:
-		FunctorType GetName(const std::string& name);
-
-		std::map < std::string, FunctorType >	mNameTable;
 		std::map< std::string, uint32_t>		mVariables;
-		FunctorType								mNextName;
+		Nametable&								mNameTable;
 	};
 }
