@@ -71,5 +71,5 @@ namespace Toy {
 		std::map < std::string, FunctorType > mNameTable;
 	};
 
-	void TestParser();
+	__declspec(dllexport) void TestParser();
 }

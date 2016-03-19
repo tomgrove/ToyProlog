@@ -15,5 +15,5 @@ namespace Toy {
 		void Compile(ParseTerm& term, std::vector<Machine::Instruction>& instructions, uint32_t& reg, uint32_t root );
 	};
 
-	void TestL0Compiler();
+	__declspec(dllexport) void TestL0Compiler();
 }

@@ -17,5 +17,5 @@ namespace Toy {
 		std::map< uint32_t, Machine::Instruction*> mCodeTable;
 	};
 
-	void TestL1Compiler();
+	__declspec(dllexport) void TestL1Compiler();
 }

@@ -113,5 +113,5 @@ namespace Toy {
 		Term* AllocCells( uint32_t numCells );
 	};
 
-	void TestMachine();
+	__declspec(dllexport) void TestMachine();
 }

@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PrologToy", "PrologToy\PrologToy.vcxproj", "{BC3D02F8-4DC4-4BD3-AC38-74B60709BFCA}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PrologToyMain", "PrologToyMain\PrologToyMain\PrologToyMain.vcxproj", "{F01964D6-58B1-4940-9EB0-D0152F448BD6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BC3D02F8-4DC4-4BD3-AC38-74B60709BFCA} = {BC3D02F8-4DC4-4BD3-AC38-74B60709BFCA}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
