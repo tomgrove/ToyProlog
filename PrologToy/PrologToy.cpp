@@ -8,7 +8,7 @@
 #include "L0QueryCompiler.h"
 #include "L0Compiler.h"
 
-int _tmain(int argc, _TCHAR* argv[])
+int cat_tmain(int argc, _TCHAR* argv[])
 {
 	Toy::TestMachine();
 	Toy::TestParser();
