@@ -110,7 +110,6 @@
     <ClCompile Include="Machine.cpp" />
     <ClCompile Include="Names.cpp" />
     <ClCompile Include="Parser.cpp" />
-    <ClCompile Include="PrologToy.cpp" />
     <ClCompile Include="L0QueryCompiler.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -118,6 +117,8 @@
     </ClCompile>
     <ClCompile Include="Term.cpp" />
     <ClCompile Include="Tests\L0QueryCompilerTests.cpp" />
+    <ClCompile Include="Tests\MachineTests.cpp" />
+    <ClCompile Include="Tests\ParserTests.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

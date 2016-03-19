@@ -335,41 +335,4 @@ namespace Toy {
 			assert(0);
 		}
 	}
-
-	struct MachineFixture
-	{
-		Machine machine;
-	};
-
-	void new_variable_is_unassigned(MachineFixture& fixture )
-	{
-		auto term = fixture.machine.AllocVariable();
-		assert(term->IsUnassignedVariable() );
-	}
-
-	void new_structure_is_reachable_from_ref(MachineFixture& fixture)
-	{
-		auto term = fixture.machine.AllocStructure(12345, 3);
-		assert(term->mType == eStructureRef);
-		assert(term->mReference->mType == eStructure);
-		assert(term->mReference->mStructure.mArity == 3);
-		assert(term->mReference->mStructure.mFunctor == 12345);
-	}
-
-	void bound_variable_deferences(MachineFixture& fixture )
-	{
-		auto term = fixture.machine.AllocVariable();
-		auto atom = fixture.machine.AllocStructure(12345, 0);
-		fixture.machine.Bind(term, atom);
-		Term* dr = fixture.machine.DeRef(term);
-		assert(dr->mType == eStructureRef && dr->mReference->mStructure.mFunctor == 12345);
-	}
-
-	void TestMachine()
-	{
-		MachineFixture fixture;
-		new_variable_is_unassigned(fixture);
-		new_structure_is_reachable_from_ref(fixture);
-		bound_variable_deferences(fixture);
-	}
 };

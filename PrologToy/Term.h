@@ -40,4 +40,6 @@ namespace Toy {
 			return mType == eVariableRef || mType == eStructureRef;
 		}
 	};
+
+	std::wstring ToString(const Toy::TermType& term);
 }
