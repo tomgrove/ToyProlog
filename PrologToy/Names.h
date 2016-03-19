@@ -4,6 +4,7 @@
 #include "Term.h"
 
 namespace Toy {
+
 	class Nametable
 	{
 	public:

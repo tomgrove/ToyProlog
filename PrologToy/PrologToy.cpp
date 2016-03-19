@@ -5,7 +5,7 @@
 #include "term.h"
 #include "machine.h"
 #include "parser.h"
-#include "query.h"
+#include "L0QueryCompiler.h"
 #include "L0Compiler.h"
 
 int _tmain(int argc, _TCHAR* argv[])

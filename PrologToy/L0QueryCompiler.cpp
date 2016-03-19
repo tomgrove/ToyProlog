@@ -1,18 +1,20 @@
 #include "stdafx.h"
 #include <assert.h>
-#include "Query.h"
+#include "L0QueryCompiler.h"
 
 
 namespace Toy {
 
-	void QueryCompiler::Compile(ParseTerm& term, std::vector<Machine::Instruction>& instructions)
+	FunctionTable L0QueryCompiler::mDummyTable;
+	
+	void L0QueryCompiler::Compile(ParseTerm& term, std::vector<Machine::Instruction>& instructions)
 	{
 		uint32_t reg = 0;
 		Compile(term, instructions, reg);
 		instructions.push_back(Machine::Instruction(Machine::Opcode::eProceed));
 	}
 
-	void QueryCompiler::Compile(ParseTerm& term, std::vector<Machine::Instruction>& instructions, uint32_t& reg)
+	void L0QueryCompiler::Compile(ParseTerm& term, std::vector<Machine::Instruction>& instructions, uint32_t& reg)
 	{
 		std::vector<uint32_t> arguments;
 		Machine::Instruction root(Machine::Instruction(Machine::Opcode::ePut_Structure, mNameTable.GetName(term.mFunctor), term.mArguments.size(), reg));
@@ -51,12 +53,12 @@ namespace Toy {
 		}
 	}
 
-	void QueryTestHelper( ParseTerm& term, std::string disassembly )
+	static void QueryTestHelper( ParseTerm& term, std::string disassembly )
 	{
 		std::stringstream					ss;
 		Machine								machine;
 		Nametable							nametable;
-		QueryCompiler						compiler( nametable );
+		L0QueryCompiler						compiler( nametable );
 		std::vector<Machine::Instruction>	code;
 
 		compiler.Compile(term, code);

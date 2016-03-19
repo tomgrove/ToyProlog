@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "L0Compiler.h"
-#include "Query.h"
+#include "L0QueryCompiler.h"
 
 namespace Toy {
+
+	FunctionTable L0Compiler::mDummyTable;
 
 	void L0Compiler::Compile(ParseTerm& term, std::vector<Machine::Instruction>& instructions, uint32_t& reg, uint32_t root )
 	{
@@ -75,7 +77,7 @@ namespace Toy {
 
 		std::stringstream hs;
 		ParseTerm q("p", ParseTerm("X"), ParseTerm("Y"), ParseTerm("Z"));
-		QueryCompiler qc(nametable);
+		L0QueryCompiler qc(nametable);
 		std::vector<Machine::Instruction> qinstr;
 		qc.Compile(q, qinstr);
 		machine.Execute(&qinstr[0]);

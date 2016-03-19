@@ -13,6 +13,7 @@ namespace Toy {
 			, mMode( eRead )
 			, mFail( false )
 			, mS( nullptr )
+			, mP( nullptr )
 		{}
 
 		Term* AllocVariable();
@@ -34,15 +35,25 @@ namespace Toy {
 			eGet_Structure,
 			eUnify_Variable,
 			eUnify_Value,
+			eCall,
 			eProceed
 		} Opcode;
 
 		struct Instruction
 		{
 			Opcode	 mOp;
-			uint32_t mArgs[3];
+			union {
+				uint32_t mArgs[3];
+				Instruction* mTarget;
+			};
+
 			Instruction()
 				: mOp(eNop)
+			{}
+
+			Instruction(Instruction* target)
+				: mOp(eCall)
+				, mTarget(target)
 			{}
 
 			Instruction(Opcode op)
@@ -71,12 +82,14 @@ namespace Toy {
 			}
 		};
 
-		Term		mXs[ NumTempRegisters ];
 		Term*		mH;
-		Term*		mS;
 		uint32_t	mHeapIndex;
-		Mode		mMode;
-		bool		mFail;
+
+		Term			mXs[ NumTempRegisters ];
+		Term*			mS;
+		Instruction*	mP;
+		Mode			mMode;
+		bool			mFail;
 
 		Term* DeRef(Term* term);
 		void  Bind(Term* term, Term* ref);

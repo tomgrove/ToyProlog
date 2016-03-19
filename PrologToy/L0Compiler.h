@@ -5,9 +5,10 @@
 namespace Toy {
 	class L0Compiler : public Compiler
 	{
+		static FunctionTable mDummyTable;
 	public:
 		L0Compiler( Nametable& nametable )
-			: Compiler( nametable )
+			: Compiler( nametable, mDummyTable  )
 		{}
 		virtual void Compile(ParseTerm& term, std::vector<Machine::Instruction>& instructions) override;
 	private:

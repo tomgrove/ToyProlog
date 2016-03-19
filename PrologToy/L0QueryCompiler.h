@@ -4,11 +4,12 @@
 
 namespace Toy {
 
-	class QueryCompiler : public Compiler
+	class L0QueryCompiler : public Compiler
 	{
+		static FunctionTable mDummyTable;
 	public:
-		QueryCompiler(Nametable& nametable)
-			: Compiler(nametable)
+		L0QueryCompiler(Nametable& nametable)
+			: Compiler(nametable, mDummyTable)
 		{}
 		virtual void Compile(ParseTerm& term, std::vector<Machine::Instruction>& instructions ) override;
 	private:

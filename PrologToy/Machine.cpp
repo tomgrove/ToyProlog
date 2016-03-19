@@ -157,7 +157,7 @@ namespace Toy {
 		switch (mMode)
 		{
 		case eRead:
-			Unify(mXs[reg].mReference, mS);
+			Unify(&mXs[reg], mS);
 			break;
 		case eWrite:
 			set_value(reg);
@@ -190,6 +190,9 @@ namespace Toy {
 					break;
 				case eUnify_Value:
 					unify_value(instr->mArgs[0]);
+					break;
+				case eCall:
+					mP = instr->mTarget;
 					break;
 				case eNop:
 					break;
@@ -227,6 +230,9 @@ namespace Toy {
 					break;
 				case eUnify_Value:
 					ss << "unify_value\t\tx" << instr.mArgs[0] << std::endl;
+					break;
+				case eCall:
+					ss << "call\t\t" << instr.mTarget << std::endl;
 					break;
 				case eProceed:
 					ss << "proceed" << std::endl;
