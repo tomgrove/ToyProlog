@@ -54,7 +54,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(VCInstallDir)UnitTest\include</AdditionalIncludeDirectories>
       <CompileAsManaged>false</CompileAsManaged>
-      <DebugInformationFormat>None</DebugInformationFormat>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <MinimalRebuild>false</MinimalRebuild>
       <ExceptionHandling>Sync</ExceptionHandling>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -95,6 +95,7 @@
     <ClInclude Include="L1Compiler.h" />
     <ClInclude Include="L1QueryCompiler.h" />
     <ClInclude Include="Machine.h" />
+    <ClInclude Include="Maybe.h" />
     <ClInclude Include="Names.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="L0QueryCompiler.h" />

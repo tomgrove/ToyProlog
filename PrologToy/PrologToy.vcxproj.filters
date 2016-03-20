@@ -54,6 +54,9 @@
     <ClInclude Include="L0QueryCompiler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Maybe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 
+#include "Maybe.h"
 #include "Term.h"
 
 namespace Toy {
@@ -12,6 +13,10 @@ namespace Toy {
 	class ParseTerm
 	{
 	public:
+
+		ParseTerm()
+		{}
+
 		explicit ParseTerm(std::string name) 
 			: mFunctor(name)
 		{}
@@ -67,9 +72,19 @@ namespace Toy {
 
 	class Parser
 	{
+	public:
+		Parser()
+			: mFunctorId(0)
+		{}
+		Maybe<ParseTerm> ParseOneTerm(char* input, char** rest);
+	public:
+		void ParseWhitespace(char* input, char** rest);
+		std::string ParseAlphaNumeric(char* input, char** rest);
+		Maybe<FunctorType> ParseFunctor(char* input, char** rest);
+		Maybe<FunctorType> ParseVariable(char* input, char** rest);
+		FunctorType GetOrAddName(std::string name);
 	private:
 		std::map < std::string, FunctorType > mNameTable;
+		FunctorType							  mFunctorId;
 	};
-
-	__declspec(dllexport) void TestParser();
 }
